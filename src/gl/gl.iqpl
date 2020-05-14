@@ -1,0 +1,191 @@
+namespace com.twosigmaiq.alpha.gl
+
+import com.twosigmaiq.alpha
+
+// The product is the root of the tree
+line GeneralLiability {
+
+ // GL Coverages A, B & C
+  BIPDPremOpsLiabilityCov
+  BIPDProdCompOpsLiabilityCov
+  PersonalAdvertisingInjuryLiabilityCov
+  MedicalPaymentsCov
+  DamagePremisesRentedToYouCov
+
+  AuditPeriod: AuditPeriods
+
+}
+
+// limits
+limit GeneralAggregateLimit: GeneralAggregateLimitEnum {
+    per = BIPDPremOpsLiabilityCov
+    per = PersonalAdvertisingInjuryLiabilityCov
+    per = MedicalPaymentsCov
+    per = DamagePremisesRentedToYouCov
+}
+
+enum GeneralAggregateLimitEnum: number {
+  L200000 = 200000
+  L250000 = 250000
+  L500000 = 500000
+  L1000000 = 1000000
+  L2000000 = 2000000
+  L4000000 = 4000000
+  L5000000 = 5000000
+  L10000000 = 10000000
+}
+
+limit ProdCompOpsAggregateLimit: ProdCompOpsAggregateLimitEnum {
+    per = BIPDProdCompOpsLiabilityCov
+}
+
+enum ProdCompOpsAggregateLimitEnum: number {
+  L200000 = 200000
+  L250000 = 250000
+  L500000 = 500000
+  L1000000 = 1000000
+  L2000000 = 2000000
+  L4000000 = 4000000
+  L5000000 = 5000000
+  L10000000 = 10000000
+}
+
+limit GeneralOccurrenceLimit: GeneralOccurrenceLimitEnum {
+    per = BIPDPremOpsLiabilityCov
+    per = BIPDProdCompOpsLiabilityCov
+    per = MedicalPaymentsCov
+    per = DamagePremisesRentedToYouCov
+}
+
+enum GeneralOccurrenceLimitEnum: number {
+  L100000 = 100000
+  L250000 = 250000
+  L500000 = 500000
+  L1000000 = 1000000
+  L2000000 = 2000000
+  L5000000 = 5000000
+}
+
+limit PersonalAdvertisingInjuryLiabilityLimit: PersonalAdvertisingInjuryLiabilityLimitEnum {
+    per = PersonalAdvertisingInjuryLiabilityCov
+}
+
+enum PersonalAdvertisingInjuryLiabilityLimitEnum: number {
+  L100000 = 100000
+  L200000 = 200000
+  L300000 = 300000
+  L400000 = 400000
+  L500000 = 500000
+}
+
+limit DamagePremisesRentedToYouLimitEnum: money {
+    per = DamagePremisesRentedToYouCov
+}
+
+enum DamagePremisesRentedToYouLimitEnum: number {
+  L100000 = 100000
+  L250000 = 250000
+  L500000 = 500000
+  L1000000 = 1000000
+}
+
+limit MedicalPaymentsLimit: MedicalPaymentsLimitEnum {
+    per = MedicalPaymentsCov
+}
+
+enum MedicalPaymentsLimitEnum: number {
+  L5000 = 5000
+  L10000 = 10000
+  L25000 = 25000
+}
+
+deductible AllDeductible: AllDeductibleEnum {
+    per = BIPDPremOpsLiabilityCov
+    per = BIPDProdCompOpsLiabilityCov
+    per = PersonalAdvertisingInjuryLiabilityCov
+    per = MedicalPaymentsCov
+    per = DamagePremisesRentedToYouCov
+}
+
+enum AllDeductibleEnum: number {
+  D0 = 0
+  D5000 = 5000
+  D10000 = 10000
+}
+
+coverage BIPDPremOpsLiabilityCov { // COVERAGE A – BODILY INJURY AND PROPERTY DAMAGE LIABILITY - Premises and Operations only
+ // PremOps
+    GeneralLiability
+
+    Limit: GeneralOccurrenceLimit
+    Limit: GeneralAggregateLimit
+    Deductible: AllDeductible
+}
+
+coverage BIPDProdCompOpsLiabilityCov { // COVERAGE A – BODILY INJURY AND PROPERTY DAMAGE LIABILITY- Product and Completed Operations only
+ // Product Completed
+    GeneralLiability
+
+    Limit: GeneralOccurrenceLimit
+    Limit: ProdCompOpsAggregateLimit
+    Deductible: AllDeductible
+}
+
+coverage PersonalAdvertisingInjuryLiabilityCov { // COVERAGE B – PERSONAL AND ADVERTISING INJURY LIABILITY
+    GeneralLiability
+
+    Limit: PersonalAdvertisingInjuryLiabilityLimit
+    Limit: GeneralAggregateLimit
+    Deductible: AllDeductible
+}
+
+coverage MedicalPaymentsCov { // COVERAGE C – MEDICAL PAYMENTS
+    GeneralLiability
+
+    Limit: MedicalPaymentsLimit
+    Limit: GeneralAggregateLimit
+    Deductible: AllDeductible
+}
+
+coverage DamagePremisesRentedToYouCov { // COVERAGE C – MEDICAL PAYMENTS
+    GeneralLiability
+
+    Limit: DamagePremisesRentedToYouLimit
+    Limit: GeneralAggregateLimit
+    Deductible: AllDeductible
+}
+
+// enums
+
+enum AuditPeriods {
+  annually = "Annually",
+  semiannually = "Semiannually",
+  quarterly = "Quarterly",
+  monthly = "Monthly"
+}
+
+enum Exposures {
+  SqaureFootage = "SqFt",
+  CustomerCount = "CustCount"
+  Revenue = "Revenue"
+}
+
+
+// entity Location {
+//     gps_coord: string {
+//         key = true
+//     }
+//     make: string
+//     model: string
+//     year: number
+// }
+
+
+
+// output
+// location #
+//  - classification / code #
+//  - premium base
+//  - rate prem/ops
+//  - rate prod/comp
+
